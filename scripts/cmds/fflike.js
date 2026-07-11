@@ -4,7 +4,7 @@ module.exports = {
     config: {
         name: "fflike",
         version: "1.0.0",
-        author: "akashx404",
+        author: "FARHAN-KHAN",
         countDown: 5,
         role: 0,
         shortDescription: "Send Free Fire likes",

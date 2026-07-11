@@ -3,7 +3,7 @@ module.exports = {
 				name: "married",
 				aliases: ["married"],
 				version: "1.0",
-				author: "kivv",
+				author: "FARHAN-KHAN",
 				countDown: 5,
 				role: 0,
 				shortDescription: "get a wife",

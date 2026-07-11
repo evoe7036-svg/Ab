@@ -6,11 +6,11 @@ module.exports = {
   config: {
     name: "funny",
     version: "2.0.0",
-    author: "NAZRUL x MOHAMMAD AKASH",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 0,
-    shortDescription: "Sad video sender 😢",
-    longDescription: "Sends random sad video with emotional captions 💔",
+    shortDescription: "Funny video sender 😃",
+    longDescription: "Sends random funny video with emotional captions 😂",
     category: "media",
     guide: {
       en: "{pn}"

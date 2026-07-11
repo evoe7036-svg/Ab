@@ -23,7 +23,7 @@ module.exports = {
 	config: {
 		name: "weather",
 		version: "1.2",
-		author: "NTKhang",
+		author: "MR_FARHAN",
 		countDown: 5,
 		role: 0,
 		description: {

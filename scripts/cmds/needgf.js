@@ -28,7 +28,7 @@ module.exports = {
   config: {
     name: "needgf",
     version: "3.0.1",
-    author: "MOHAMMAD AKASH",
+    author: "FARHAN-KHAN",
     countDown: 10,
     role: 0,
     shortDescription: "তোর Gf এর প্রোফাইল পিক দেখায় 😍",

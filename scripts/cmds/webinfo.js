@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "webinfo",
     version: "2.0",
-    author: "MOHAMMAD AKASH",
+    author: "MR_FARHAN",
     countDown: 5,
     role: 0,
     shortDescription: { en: "Get detailed information about any website" },

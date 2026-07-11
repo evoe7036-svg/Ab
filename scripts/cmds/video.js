@@ -7,7 +7,7 @@ module.exports = {
   config: {
     name: "video",
     version: "2.2.2",
-    author: "Milon Pro",
+    author: "MR_FARHAN",
     countDown: 5,
     role: 0,
     shortDescription: "Search & download YouTube videos",

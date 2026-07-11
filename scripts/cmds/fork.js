@@ -1,19 +1,74 @@
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
+
+// 🔒 AUTHOR LOCK
+const LOCKED_AUTHOR = "FARHAN-KHAN";
+
 module.exports = {
   config: {
     name: "fork",
     aliases: ["repo", "link"],
-    version: "1.0",
-    author: "Aphelion",
+    version: "1.3",
+    author: LOCKED_AUTHOR,
     countDown: 3,
     role: 0,
-    longDescription: "Returns the link to the official, updated fork of the bot's repository.",
+    longDescription: "Send fork with styled image",
     category: "system",
     guide: { en: "{pn}" }
   },
 
-  onStart: async function({ message }) {
-    const text = "🔗 My GitHub Account:-https://www.facebook.com/DARK.XAIKO.420";
-    
-    message.reply(text);
+  onStart: async function ({ message }) {
+    try {
+
+      // 🔒 author protection
+      if (module.exports.config.author !== LOCKED_AUTHOR) {
+        return message.reply("❌ AUTHOR LOCKED! You cannot modify this file.");
+      }
+
+      const text =
+`⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
+╭•┄┅══❁♻️❁══┅┄•╮
+ •—»✨𝗢𝗪𝗡𝗘𝗥 𝗙𝗢𝗥𝗞✨«—•
+╰•┄┅══❁♻️❁══┅┄•╯
+⋆✦⋆⎯⎯⎯⎯⎯⎯⎯⎯⎯⋆✦⋆
+
+╔══════════════════╗
+║👉 এই নাও বস ফারহান এর
+║   GitHub account লিংক 👇
+╠══════════════════╣
+║ https://github.com/FARHAN-MIRAI-BOT/SIZUKA
+╚══════════════════╝`;
+
+      const imgUrl = "https://files.catbox.moe/0usiw5.jpg";
+
+      const cacheDir = path.join(__dirname, "cache");
+      const filePath = path.join(cacheDir, "fork.jpg");
+
+      // 📁 cache folder ensure
+      if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir, { recursive: true });
+      }
+
+      // 🌐 download image
+      const response = await axios.get(imgUrl, {
+        responseType: "arraybuffer"
+      });
+
+      fs.writeFileSync(filePath, Buffer.from(response.data));
+
+      // 📤 send message
+      await message.reply({
+        body: text,
+        attachment: fs.createReadStream(filePath)
+      });
+
+      // 🧹 cleanup
+      fs.unlinkSync(filePath);
+
+    } catch (err) {
+      console.error("Fork command error:", err);
+      message.reply("❌ Failed to send fork message!");
+    }
   }
 };

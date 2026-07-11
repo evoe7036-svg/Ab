@@ -6,7 +6,7 @@ module.exports = {
     name: "groupinfo",
     aliases: ['boxinfo'],
     version: "1.0",
-    author: "Milon",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 0,
     shortDescription: "See Box info",

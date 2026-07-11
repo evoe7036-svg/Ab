@@ -69,7 +69,7 @@ module.exports = {
     name: "fakechat",
     aliases: ["fchat"],
     version: "9.0",
-    author: "MOHAMMAD AKASH",
+    author: "FARHAN-KHAN",
     role: 0,
     countDown: 5,
     shortDescription: { en: "Messenger FakeChat Dark Mode (Big Light Font)" },

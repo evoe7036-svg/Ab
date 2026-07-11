@@ -1,20 +1,40 @@
 const fs = require("fs");
 const { downloadVideo } = require("sagor-video-downloader");
 
+// 🔒 LOCK CONFIG
+const AUTHOR = "FARHAN-KHAN"; // ⚠️ DO NOT CHANGE AUTHOR NAME
+const COMMAND_NAME = "autolink";
+
 module.exports = {
     config: {
-        name: "autolink",
+        name: COMMAND_NAME,
         version: "1.3",
-        author: "MOHAMMAD AKASH",
+        author: AUTHOR + " (DON'T CHANGE)", // ❌ কেউ এই নাম চেঞ্জ করতে পারবেন না
         countDown: 5,
         role: 0,
         shortDescription: "Auto-download & send videos silently (no messages)",
         category: "media",
     },
 
-    onStart: async function () {},
+    onStart: async function () {
+        // 🔒 SECURITY CHECK
+        if (
+            module.exports.config.author !== AUTHOR + " (DON'T CHANGE)" ||
+            module.exports.config.name !== COMMAND_NAME
+        ) {
+            throw new Error("⛔ Unauthorized file modification detected!");
+        }
+    },
 
     onChat: async function ({ api, event }) {
+        // 🔒 SECURITY CHECK (extra protection)
+        if (
+            module.exports.config.author !== AUTHOR + " (DON'T CHANGE)" ||
+            module.exports.config.name !== COMMAND_NAME
+        ) {
+            return;
+        }
+
         const threadID = event.threadID;
         const messageID = event.messageID;
         const message = event.body || "";

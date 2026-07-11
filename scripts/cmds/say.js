@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "say",
     version: "2.0.0",
-    author: "MOHAMMAD AKASH",
+    author: "MR_FARHAN",
     countDown: 5,
     role: 0,
     shortDescription: "Google TTS দিয়ে ভয়েসে টেক্সট বলা",

@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "antiout",
     version: "7.0",
-    author: "Sourav Ahmed",
+    author: "FARHAN-KHAN", // 🔒 LOCKED AUTHOR
     countDown: 5,
     role: 0,
     shortDescription: "Enable or disable antiout",
@@ -12,6 +12,9 @@ module.exports = {
   },
 
   onStart: async function ({ message, event, threadsData, args }) {
+
+    // 🔒 author lock check
+    if (module.exports.config.author !== "FARHAN-KHAN") return;
 
     let antiout = await threadsData.get(event.threadID, "settings.antiout");
 
@@ -29,6 +32,9 @@ module.exports = {
   },
 
   onEvent: async function ({ api, event, threadsData }) {
+
+    // 🔒 author lock check
+    if (module.exports.config.author !== "FARHAN-KHAN") return;
 
     const antiout = await threadsData.get(event.threadID, "settings.antiout");
     if (!antiout) return;
@@ -52,19 +58,17 @@ module.exports = {
 তুই এখন "Escape Legend" 💀🏆
 আর add করা হইবো না! Bye bye 👋
 
-***_Powered by Farhan ⚡_***`,
+***_Powered by FARHAN-KHAN ⚡_***`,
           event.threadID
         );
       }
 
       try {
-
         await api.addUserToGroup(userId, event.threadID);
 
         const userInfo = await api.getUserInfo(userId);
         const userName = userInfo[userId].name;
 
-        // 3 বার বা তার বেশি হলে nickname change
         if (leaveData[userId] >= 3) {
           try {
             await api.changeNickname("Runner Pro 🏃‍♂️🔥", event.threadID, userId);
@@ -82,7 +86,7 @@ Resume তে লিখবি —
 
 আর একবার করলে surprise আছে 💀
 
-***_Powered by Farhan ⚡_***`,
+***_Powered by FARHAN-KHAN ⚡_***`,
               mentions: [{
                 tag: userName,
                 id: userId
@@ -102,7 +106,7 @@ Resume তে লিখবি —
 
 Security তোর উপর নজর রাখতেছে 👀
 
-***_Powered by Farhan ⚡_***`,
+***_Powered by FARHAN-KHAN ⚡_***`,
               mentions: [{
                 tag: userName,
                 id: userId
@@ -122,7 +126,7 @@ Security তোর উপর নজর রাখতেছে 👀
 
 Bot watching you 🕵️‍♂️🔥
 
-***_Powered by Farhan ⚡_***`,
+***_Powered by FARHAN-KHAN ⚡_***`,
               mentions: [{
                 tag: userName,
                 id: userId
@@ -144,7 +148,7 @@ Area 51 level security 🔒👽
 Mission: Re-Added Successfully ✅🔥
 (Leave count: ${leaveData[userId]}/5)
 
-***_Powered by Farhan ⚡_***`,
+***_Powered by FARHAN-KHAN ⚡_***`,
               mentions: [{
                 tag: userName,
                 id: userId
@@ -161,7 +165,7 @@ Mission: Re-Added Successfully ✅🔥
           `🤡 পালানোর প্ল্যান সফল হইছে মনে হয়ছে! হয়তো ওর লগে আমি এড না অথবা আমাকে block করছে 😭
 এইবার বেঁচে গেলি 😏
 
-***_Powered by Farhan ⚡_***`,
+***_Powered by FARHAN-KHAN ⚡_***`,
           event.threadID
         );
 

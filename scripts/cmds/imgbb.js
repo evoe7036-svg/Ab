@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "imgbb",
     version: "1.0",
-    author: "nexo_here",
+    author: "FARHAN-KHAN",
     category: "tools",
     shortDescription: "Upload replied image to imgbb & get link",
     longDescription: "Reply to an image with this command to get its imgbb link",

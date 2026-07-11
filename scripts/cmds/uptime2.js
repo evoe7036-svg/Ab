@@ -10,7 +10,7 @@ config: {
 name: "up2",
 aliases: ["uptime2", "Up2"],
 version: "22.0.0",
-author: "Milon",
+author: "MR_FARHAN",
 countDown: 5,
 role: 0,
 category: "system",

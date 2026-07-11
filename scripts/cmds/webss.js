@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "webss",
     version: "1.1",
-    author: "MOHAMMAD AKASH",
+    author: "MR_FARHAN",
     countDown: 5,
     role: 0,
     shortDescription: {

@@ -7,7 +7,7 @@ module.exports = {
     name: "callad",
     aliases: ["call", "called"],
     version: "2.0",
-    author: "NTKhang | Edited by Akash",
+    author: "NTKhang | Edited by farhan",
     countDown: 5,
     role: 0,
     category: "contacts admin",

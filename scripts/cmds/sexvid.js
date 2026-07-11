@@ -3,7 +3,7 @@ module.exports = {
     name: "sex",
     aliases: ["sex","sexy"],
     version: "2.0",
-    author: "nexo_here",
+    author: "MR_FARHAN",
     countDown: 30,
     role: 2,
     shortDescription: "",

@@ -2,16 +2,28 @@ const fs = require("fs-extra");
 const path = require("path");
 const https = require("https");
 
+const AUTHOR = "FARHAN-KHAN"; // 🔒 LOCKED AUTHOR
+
 exports.config = {
   name: "cutereply",
   version: "2.1.0",
-  author: "MOHAMMAD AKASH",
+  author: AUTHOR,
   countDown: 0,
   role: 0,
   shortDescription: "Reply with text + image on trigger",
   longDescription: "Trigger মেসেজে reply দিয়ে text + image পাঠাবে",
   category: "system"
 };
+
+// =======================
+// 🔒 AUTHOR LOCK SYSTEM
+// =======================
+if (exports.config.author !== AUTHOR) {
+  console.log("❌ AUTHOR CHANGED! FILE LOCKED!");
+  process.exit(1);
+}
+
+// =======================
 
 const cooldown = 10000; // 10 sec
 const last = {};
@@ -21,15 +33,15 @@ const last = {};
 // =======================
 const TRIGGERS = [
   {
-    words: ["farhan","Farhan","FARHAN","ফারহান",],
-    text: "👉আমার বস♻️ 𝐑𝐉 𝐅𝐀𝐑𝐇𝐀𝐍 এখন বিজি আছে । তার ইনবক্সে এ মেসেজ দিয়ে রাখো ‎‎‎‎‎‎‎‎‎[https://www.facebook.com/DEVIL.FARHAN.420] 🔰 ♪√বস ফ্রি হলে আসবে,! 😜🐒",
+    words: ["farhan", "Farhan", "FARHAN", "ফারহান"],
+    text: "👉আমার বস♻️ 𝐑𝐉 𝐅𝐀𝐑𝐇𝐀𝐍 এখন বিজি আছে । তার ইনবক্সে এ মেসেজ দিয়ে রাখো ‎‎‎‎‎‎‎‎‎[https://www.facebook.com/MR.FARHAN.420] 🔰 ♪√বস ফ্রি হলে আসবে,! 😜🐒",
     images: [
       "https://i.imgur.com/skOXv81.jpeg"
     ]
   },
   {
-    words: ["@এৃঁলেৃঁ'ক্সৃঁ সিৃঁ'জুৃঁ'কাৃঁ","@সিৃঁ'জুৃঁ সিৃঁ'জুৃঁ'কাৃঁ","@সিৃঁ'জুৃঁ'কাৃঁ সিৃঁ'জুৃঁ"],
-    text: "-আমাকে মেনশন দিয়ে লাভ নাই- কারণ আমি একটা মেসেঞ্জার চ্যাট রোবট,🤖 আমাকে বানানো হয়েছে শুধুমাত্র আপনাদেরকে বিনোদনের জন্য, আমাকে বানিয়েছেন আমার বস ফারহান-😽🫶 [https://www.facebook.com/DEVIL.FARHAN.420,!🌺",
+    words: ["@এৃঁলেৃঁ'ক্সৃঁ সিৃঁ'জুৃঁ'কাৃঁ", "@সিৃঁ'জুৃঁ সিৃঁ'জুৃঁ'কাৃঁ", "@সিৃঁ'জুৃঁ'কাৃঁ সিৃঁ'জুৃঁ"],
+    text: "-আমাকে মেনশন দিয়ে লাভ নাই- কারণ আমি একটা মেসেঞ্জার চ্যাট রোবট,🤖 আমাকে বানানো হয়েছে শুধুমাত্র আপনাদেরকে বিনোদনের জন্য, আমাকে বানিয়েছেন আমার বস ফারহান-😽🫶 [https://www.facebook.com/MR.FARHAN.420,!🌺",
     images: [
       "https://i.imgur.com/rkrXNso.jpeg",
       "https://i.imgur.com/zrpFJUc.jpeg"
@@ -72,14 +84,14 @@ exports.onChat = async function ({ event, api }) {
       await download(imgUrl, imgPath);
     }
 
-    // 🔥 REPLY to the same message
+    // 🔥 reply message
     api.sendMessage(
       {
         body: matched.text,
         attachment: fs.createReadStream(imgPath)
       },
       threadID,
-      messageID // <-- এইটা থাকায় রিপ্লাই হবে
+      messageID
     );
 
   } catch (e) {
@@ -87,14 +99,19 @@ exports.onChat = async function ({ event, api }) {
   }
 };
 
+// =======================
+// DOWNLOAD FUNCTION
+// =======================
 function download(url, dest) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
+
     https.get(url, (res) => {
       if (res.statusCode !== 200) {
         fs.unlink(dest, () => {});
         return reject();
       }
+
       res.pipe(file);
       file.on("finish", () => file.close(resolve));
     }).on("error", () => {

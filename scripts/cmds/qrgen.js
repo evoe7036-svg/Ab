@@ -15,7 +15,7 @@ module.exports = {
     name: "qrgen",
     aliases: ["qrcode"],
     version: "1.0",
-    author: "MOHAMMAD AKASH",
+    author: "MR_FARHAN",
     countDown: 5,
     role: 0,
     longDescription: "Generate a QR code from text, link, or any information.",

@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "download",
     version: "1.4",
-    author: "MOHAMMAD AKASH",
+    author: "FARHAN-KHAN", // LOCKED AUTHOR
     countDown: 5,
     role: 0,
     shortDescription: "Download media from direct link",
@@ -15,11 +15,24 @@ module.exports = {
   },
 
   onStart: async function ({ api, event, args }) {
+
+    // ===== AUTHOR LOCK SYSTEM =====
+    const LOCKED_AUTHOR = "FARHAN-KHAN";
+
+    if (module.exports.config.author !== LOCKED_AUTHOR) {
+      return api.sendMessage(
+        "⛔ F I L E  L O C K E D\nAuthor change detected!\nThis command is disabled.",
+        event.threadID,
+        event.messageID
+      );
+    }
+    // ==============================
+
     const url = args[0];
 
     if (!url) {
       return api.sendMessage(
-        "⚠️ Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴅɪʀᴇᴄᴛ ᴅᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ.\n\nE xᴀᴍᴘʟᴇ:\n/download https://example.com/video.mp4",
+        "⚠️ Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴅɪʀᴇᴄᴛ ᴅᴏᴡɴʟᴏᴀᴅ ʟɪɴᴋ.\n\nExample:\n/download https://example.com/video.mp4",
         event.threadID,
         event.messageID
       );
@@ -31,11 +44,12 @@ module.exports = {
       ".pdf", ".docx", ".txt", ".zip"
     ];
 
-    const ext = path.extname(url.split("?")[0]).toLowerCase();
+    const cleanUrl = url.split("?")[0];
+    const ext = path.extname(cleanUrl).toLowerCase();
 
     if (!supported.includes(ext)) {
       return api.sendMessage(
-        "❌ Uɴsᴜᴘᴘᴏʀᴛᴇᴅ ғɪʟᴇ ᴛʏᴘᴇ!\n\nSᴜᴘᴘᴏʀᴛᴇᴅ:\nmp4, mp3, jpg, png, gif, pdf, docx, txt, zip",
+        "❌ Uɴsᴜᴘᴘᴏʀᴛᴇᴅ ғɪʟᴇ ᴛʏᴘᴇ!\n\nSupported:\nmp4, mp3, jpg, png, gif, pdf, docx, txt, zip",
         event.threadID,
         event.messageID
       );
@@ -44,9 +58,8 @@ module.exports = {
     const fileName = `download${ext}`;
 
     try {
-      // Loading message (Aʙᴄ Fᴏɴᴛ)
       const loadingMsg = await api.sendMessage(
-        "⏳ Dᴏᴡɴʟᴏᴀᴅɪɴɢ • Jᴜsᴛ A Mᴏᴍᴇɴᴛ...",
+        "⏳ Dᴏᴡɴʟᴏᴀᴅɪɴɢ...",
         event.threadID
       );
 
@@ -57,12 +70,11 @@ module.exports = {
 
       fs.writeFileSync(fileName, res.data);
 
-      // Unsend loading message
       api.unsendMessage(loadingMsg.messageID);
 
-      api.sendMessage(
+      return api.sendMessage(
         {
-          body: `✅ Dᴏᴡɴʟᴏᴀᴅ Cᴏᴍᴘʟᴇᴛᴇ!\n📥 Fɪʟᴇ: ${fileName}`,
+          body: `✅ Download Complete!\n📁 File: ${fileName}`,
           attachment: fs.createReadStream(fileName)
         },
         event.threadID,
@@ -71,8 +83,8 @@ module.exports = {
 
     } catch (err) {
       console.error(err);
-      api.sendMessage(
-        "❌ Dᴏᴡɴʟᴏᴀᴅ ғᴀɪʟᴇᴅ! Tʜᴇ ʟɪɴᴋ ᴍᴀʏ ɴᴏᴛ ʙᴇ ᴅɪʀᴇᴄᴛ.",
+      return api.sendMessage(
+        "❌ Download failed! The link may not be direct or invalid.",
         event.threadID
       );
     }

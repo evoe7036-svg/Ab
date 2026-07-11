@@ -5,7 +5,7 @@ module.exports = {
     name: "momoi",
     aliases: ["omaigotto"],
     version: "1.2",
-    author: "Zihad Ahmed",
+    author: "FARHAN-KHAN",
     shortDescription: "Generate audio",
     longDescription: "Send text or reply to a message",
     category: "momoi",

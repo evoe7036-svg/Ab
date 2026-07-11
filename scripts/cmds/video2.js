@@ -39,7 +39,7 @@ function getVideoID(url) {
 
 const config = {
     name: "video2",
-    author: "Mesbah Saxx",
+    author: "MR_FARHAN",
     credits: "Mesbah Saxx",
     version: "1.0.0",
     role: 0,

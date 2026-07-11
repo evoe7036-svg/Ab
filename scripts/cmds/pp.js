@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "pp",
     version: "1.0.0",
-    author: "MOHAMMAD AKASH",
+    author: "FARHAN-KHAN",
     countDown: 3,
     role: 0,
     shortDescription: "Facebook প্রোফাইল পিকচার দেখাবে 📸",

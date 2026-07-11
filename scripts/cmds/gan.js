@@ -4,12 +4,15 @@ const path = require("path");
 
 let lastPlayed = -1;
 
+// 🔐 AUTHOR LOCK (DO NOT CHANGE)
+const AUTHOR_LOCK = "FARHAN-KHAN";
+
 module.exports = {
   config: {
     name: "gan",
     version: "1.0.2",
     role: 0,
-    author: "MOHAMMAD AKASH",
+    author: AUTHOR_LOCK,
     shortDescription: "Play random song with command 🎶",
     longDescription: "Sends a random mp3 song from preset Catbox links.",
     category: "media",
@@ -18,6 +21,15 @@ module.exports = {
 
   onStart: async function({ api, event }) {
     const { threadID, messageID } = event;
+
+    // 🔐 ANTI-CHANGE LOCK CHECK
+    if (module.exports.config.author !== AUTHOR_LOCK) {
+      return api.sendMessage(
+        "⛔ 𝗔𝘂𝘁𝗵𝗼𝗿 𝗹𝗼𝗰𝗸 𝗳𝗮𝗶𝗹𝗲𝗱! 𝗙𝗶𝗹𝗲 𝗺𝗼𝗱𝗶𝗳𝗶𝗲𝗱.",
+        threadID,
+        messageID
+      );
+    }
 
     const songLinks = [
       "https://files.catbox.moe/etsdn9.mp3",
@@ -47,14 +59,13 @@ module.exports = {
       return api.sendMessage("❌ Nᴏ sᴏɴɢs ᴄᴏᴜʟᴅ ʙᴇ ғᴏᴜɴᴅ!", threadID, messageID);
     }
 
-    // ⏳ React for loading
     api.setMessageReaction("🎵", messageID, () => {}, true);
 
-    // 🎲 Random song index (avoid repeat)
     let index;
     do {
       index = Math.floor(Math.random() * songLinks.length);
     } while (index === lastPlayed && songLinks.length > 1);
+
     lastPlayed = index;
 
     const url = songLinks[index];
@@ -84,13 +95,11 @@ module.exports = {
         );
       });
 
-      writer.on("error", (err) => {
-        console.error("Error writing file:", err);
+      writer.on("error", () => {
         api.sendMessage("❌ Fᴀɪʟᴇᴅ ᴛᴏ sᴇɴᴅ sᴏɴɢ!", threadID, messageID);
       });
 
     } catch (err) {
-      console.error("Download error:", err);
       api.sendMessage("⚠️ Fᴀɪʟᴇᴅ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ sᴏɴɢ!", threadID, messageID);
     }
   }

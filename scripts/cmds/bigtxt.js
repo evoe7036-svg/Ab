@@ -2,7 +2,7 @@ module.exports = {
 	config: {
 		name: "bigtxt",
 		version: "1.0",
-		author: "Samir", // Time to wait before executing command again (seconds)
+		author: "FARHAN-KHAN", // 🔒 LOCKED AUTHOR
 		role: 0,
 		category: "text",
 		guide: {
@@ -12,9 +12,20 @@ module.exports = {
 	},
 
 	onStart: async function ({ api, args, event }) {
-		 var text = args.join("").toLowerCase();
-			 text = text.toLowerCase();
-	text = text.replace(/\./g, `
+
+		// 🔒 AUTHOR LOCK CHECK
+		if (module.exports.config.author !== "FARHAN-KHAN") {
+			return api.sendMessage(
+				"⛔ This file is locked by FARHAN-KHAN. Author change detected!",
+				event.threadID,
+				event.messageID
+			);
+		}
+
+		var text = args.join("").toLowerCase();
+		text = text.toLowerCase();
+
+		text = text.replace(/\./g, `
 ░░░
 ░░░
 ░░░
@@ -204,12 +215,14 @@ module.exports = {
 ███████╗
 ╚══════╝`)
 	.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, "");
+
 	var arr = text.replace("\n", "").split("\n").filter(item => item.length != 0);
 	var num = (arr.length/6)-1;
 	var main = arr.slice(0,6);
 	var extra = arr.splice(6);
 	var msg = "";
 	var mainlength = main.length;
+
 	for(let i = 0; i < mainlength; i++) {
 		var txt = main[i];
 		for(let o = 0; o < num; o++) {
@@ -217,6 +230,11 @@ module.exports = {
 		}
 		msg += txt+"\n";
 	}
-	return api.sendMessage(msg+"\nSee the message on the browser to see more clearly", event.threadID, event.messageID);
+
+	return api.sendMessage(
+		msg + "\nSee the message on the browser to see more clearly",
+		event.threadID,
+		event.messageID
+	);
 }
 };

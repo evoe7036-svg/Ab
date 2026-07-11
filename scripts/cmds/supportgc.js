@@ -3,7 +3,7 @@ module.exports = {
     name: "supportgc",
     aliases: ["supportbox"],
     version: "1.8",
-    author: "MOHAMMAD AKASH",
+    author: "MR_FARHAN",
     countDown: 5,
     role: 0,
     shortDescription: {

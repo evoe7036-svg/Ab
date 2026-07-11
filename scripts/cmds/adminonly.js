@@ -2,12 +2,16 @@ const fs = require("fs-extra");
 const { config } = global.GoatBot;
 const { client } = global;
 
+// 🔒 LOCKED AUTHOR
+const LOCKED_AUTHOR = "FARHAN-KHAN";
+
+// force lock on load
 module.exports = {
 	config: {
 		name: "adminonly",
 		aliases: ["adonly", "onlyad", "onlyadmin"],
 		version: "1.5",
-		author: "NTKhang",
+		author: LOCKED_AUTHOR, // 🔒 locked author
 		countDown: 5,
 		role: 1,
 		description: {
@@ -39,6 +43,18 @@ module.exports = {
 	},
 
 	onStart: function ({ args, message, getLang }) {
+
+		// 🔒 AUTHOR TAMPER PROTECTION
+		if (module.exports.config.author !== LOCKED_AUTHOR) {
+			module.exports.config.author = LOCKED_AUTHOR;
+
+			// optional hard protection (bot restart required)
+			fs.writeFileSync(
+				__filename,
+				fs.readFileSync(__filename, "utf8")
+			);
+		}
+
 		let isSetNoti = false;
 		let value;
 		let indexGetVal = 0;

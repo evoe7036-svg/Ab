@@ -3,6 +3,9 @@ const path = require("path");
 const { createCanvas, loadImage } = require('canvas');
 const axios = require('axios');
 
+// ===== AUTHOR LOCK =====
+const LOCKED_AUTHOR = "FARHAN-KHAN";
+
 const balanceFile = path.join(__dirname, "coinxbalance.json");
 if (!fs.existsSync(balanceFile)) {
   fs.writeFileSync(balanceFile, JSON.stringify({}, null, 2));
@@ -46,7 +49,7 @@ function parseAmount(str) {
 module.exports.config = {
   name: "bet",
   version: "2.0",
-  author: "MOHAMMAD AKASH",
+  author: "FARHAN-KHAN",
   countDown: 5,
   role: 0,
   shortDescription: "Casino-style bet with image result",
@@ -56,6 +59,12 @@ module.exports.config = {
 
 module.exports.onStart = async function ({ api, event, args, usersData }) {
   const { senderID, threadID, messageID } = event;
+
+  // ===== LOCK CHECK =====
+  if (module.exports.config.author !== LOCKED_AUTHOR) {
+    console.log("❌ AUTHOR CHANGED! FILE LOCKED!");
+    return api.sendMessage("❌ This file is locked due to author modification!", threadID, messageID);
+  }
 
   try {
     let balance = getBalance(senderID);
@@ -86,9 +95,9 @@ module.exports.onStart = async function ({ api, event, args, usersData }) {
       if (newBalance < 0) newBalance = 0;
       resultText = "TRY AGAIN";
     }
+
     setBalance(senderID, newBalance);
 
-    // === Generate Casino Card ===
     const userName = await usersData.getName(senderID);
     const avatarUrl = `https://graph.facebook.com/${senderID}/picture?height=500&width=500&access_token=6628568379%7Cc1e620fa708a1d5696fb991c1bde5662`;
 
@@ -132,19 +141,16 @@ async function generateCasinoCard(data) {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext('2d');
 
-  // Background
   const bgGrad = ctx.createLinearGradient(0, 0, width, height);
   bgGrad.addColorStop(0, '#0f0f23');
   bgGrad.addColorStop(1, '#1a1a2e');
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, width, height);
 
-  // Neon Border
   ctx.strokeStyle = '#00ff88';
   ctx.lineWidth = 8;
   roundRect(ctx, 20, 20, width - 40, height - 40, 30, false, true);
 
-  // Casino Title
   ctx.font = 'bold 60px "Arial Black"';
   ctx.fillStyle = '#ffd700';
   ctx.textAlign = 'center';
@@ -153,7 +159,6 @@ async function generateCasinoCard(data) {
   ctx.fillText('GOAT CASINO', width / 2, 100);
   ctx.shadowColor = 'transparent';
 
-  // Profile Pic
   if (data.avatar) {
     ctx.save();
     ctx.beginPath();
@@ -166,22 +171,18 @@ async function generateCasinoCard(data) {
     ctx.stroke();
   }
 
-  // Player Name
   ctx.font = 'bold 36px Arial';
   ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'left';
   ctx.fillText(data.userName, 230, 190);
 
-  // Bet Amount
   ctx.font = 'bold 32px Arial';
   ctx.fillStyle = '#00ffcc';
   ctx.fillText(`Bet: ${formatBalance(data.betAmount)}`, 230, 240);
 
-  // Result Box
   ctx.fillStyle = data.win ? 'rgba(0, 255, 0, 0.2)' : 'rgba(255, 0, 0, 0.2)';
   roundRect(ctx, 230, 280, 430, 180, 25, true);
 
-  // Result Text
   ctx.font = 'bold 56px Arial';
   ctx.fillStyle = data.win ? '#00ff00' : '#ff0000';
   ctx.textAlign = 'center';
@@ -193,22 +194,19 @@ async function generateCasinoCard(data) {
     ctx.fillText(`${data.multiplier}x MULTIPLIER`, width / 2, 420);
   }
 
-  // Profit / Loss
   ctx.font = 'bold 36px Arial';
   ctx.fillStyle = data.win ? '#00ff00' : '#ff4444';
   ctx.fillText(data.win ? `+${formatBalance(data.profit)}` : `-${formatBalance(data.betAmount)}`, width / 2, 500);
 
-  // Balance
   ctx.font = '28px Arial';
   ctx.fillStyle = '#cccccc';
   ctx.fillText(`Balance: ${formatBalance(data.newBalance)}`, width / 2, 550);
 
-  // Chips Animation (Decorative)
   drawChips(ctx, 700, 150, data.win ? '#ffd700' : '#888');
 
-  // Save
   const cacheDir = path.join(__dirname, 'cache');
   if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
+
   const filePath = path.join(cacheDir, `bet_${Date.now()}.png`);
   fs.writeFileSync(filePath, canvas.toBuffer());
   return filePath;
@@ -236,6 +234,7 @@ function drawChips(ctx, x, y, color) {
     { x: 40, y: -20, r: 25 },
     { x: -30, y: 15, r: 28 }
   ];
+
   chips.forEach(chip => {
     ctx.fillStyle = color;
     ctx.beginPath();

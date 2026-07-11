@@ -47,7 +47,7 @@ module.exports = {
     config: {
         name: "quran",
         version: "3.5",
-        author: "milon",
+        author: "MR_FARHAN",
         role: 0,
         shortDescription: "📖 কুরআন পড়ুন ও শুনুন",
         category: "islam",

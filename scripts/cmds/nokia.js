@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "nokia",
     version: "1.0",
-    author: "Helal",
+    author: "FARHAN-KHAN",
     countDown: 10,
     role: 0,
     shortDescription: {

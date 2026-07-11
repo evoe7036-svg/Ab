@@ -8,7 +8,7 @@ module.exports = {
     name: "chakrun",
     aliases: ["ckr", "chakrun"],
     version: "9.0.0",
-    author: "Milon Hasan",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 0,
     category: "system",
@@ -16,10 +16,10 @@ module.exports = {
   },
 
 /* --- [ 🔐 FILE_CREATOR_INFORMATION ] ---
- * 🤖 BOT NAME: MILON BOT
- * 👤 OWNER: MILON HASAN (MILON BOSS)
- * 📍 LOCATION: NARAYANGANJ, BANGLADESH
- * 🛠️ PROJECT: MILON BOT PROJECT (2026)
+ * 🤖 BOT NAME: FARHAN BOT
+ * 👤 OWNER: FARHAN-KHAN
+ * 📍 LOCATION: CHUADANGA, BANGLADESH
+ * 🛠️ PROJECT: FARHAN BOT PROJECT (2026)
  * --------------------------------------- */
 
   onChat: async function ({ api, event, message }) {
@@ -69,24 +69,21 @@ module.exports = {
 
       ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
 
-      // টেক্সট স্টাইল - Bold Font & High Visibility
       ctx.fillStyle = "#ffffff";
       ctx.strokeStyle = "#000000"; 
-      ctx.lineWidth = 4; // বর্ডার আরও মোটা করা হয়েছে যাতে ফুটে ওঠে
+      ctx.lineWidth = 4;
       ctx.textBaseline = "top";
 
       const startX = canvas.width * 0.07; 
       let currentY = canvas.height * 0.12; 
       const lineSpacing = canvas.height * 0.095;
 
-      // Title
       ctx.font = `bold ${Math.floor(canvas.height * 0.085)}px sans-serif`;
       ctx.strokeText("SIZUKA BOT SYSTEM INFO", startX, currentY);
       ctx.fillText("SIZUKA BOT SYSTEM INFO", startX, currentY);
       
       currentY += lineSpacing * 1.5;
 
-      // Stats with Emojis & Bold Fonts
       ctx.font = `bold ${Math.floor(canvas.height * 0.055)}px sans-serif`;
       
       const stats = [
@@ -104,11 +101,11 @@ module.exports = {
         currentY += lineSpacing; 
       });
 
-      // Footer - Credits
+      // Footer
       ctx.font = `italic bold ${Math.floor(canvas.height * 0.045)}px sans-serif`;
       ctx.fillStyle = "#00FF00"; 
-      ctx.strokeText("Power by:-Farhan Khan", startX, canvas.height - (lineSpacing * 1.1));
-      ctx.fillText("Power by:-Farhan Khan", startX, canvas.height - (lineSpacing * 1.1));
+      ctx.strokeText("Power by:-FARHAN-KHAN", startX, canvas.height - (lineSpacing * 1.1));
+      ctx.fillText("Power by:-FARHAN-KHAN", startX, canvas.height - (lineSpacing * 1.1));
 
       const buffer = canvas.toBuffer("image/png");
       fs.writeFileSync(imgPath, buffer);

@@ -2,12 +2,14 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 
+const AUTHOR = "FARHAN-KHAN";
+
 module.exports = {
   config: {
     name: "aniinfo",
     aliases: ["animeinfo", "a-info"],
     version: "1.0",
-    author: "nexo_here",
+    author: AUTHOR,
     countDown: 0,
     role: 0,
     description: "Get anime information using Jikan API",
@@ -18,16 +20,34 @@ module.exports = {
   },
 
   onStart: async function ({ api, event, args }) {
+
+    // 🔒 ANTI-TAMPER CHECK
+    if (module.exports.config.author !== AUTHOR) {
+      return api.sendMessage(
+        "⛔ File integrity error: Author modified. Command disabled!",
+        event.threadID,
+        event.messageID
+      );
+    }
+
     const query = args.join(" ");
     if (!query) {
-      return api.sendMessage("❗ Anime name missing. Try: aniinfo demon slayer", event.threadID);
+      return api.sendMessage(
+        "❗ Anime name missing. Try: aniinfo demon slayer",
+        event.threadID,
+        event.messageID
+      );
     }
 
     try {
-      const res = await axios.get(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=1`);
-      const anime = res.data.data[0];
+      const res = await axios.get(
+        `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=1`
+      );
 
-      if (!anime) return api.sendMessage("❌ No results found.", event.threadID);
+      const anime = res.data.data[0];
+      if (!anime) {
+        return api.sendMessage("❌ No results found.", event.threadID);
+      }
 
       const {
         title,
@@ -48,20 +68,24 @@ module.exports = {
 📊 Score: ${score || "?"}/10
 📡 Status: ${status}
 🎞 Episodes: ${episodes || "?"}
-📅 Aired: ${aired.string || "?"}
+📅 Aired: ${aired?.string || "?"}
 🎭 Genres: ${genres.map(g => g.name).join(", ")}
 
 📝 Description:
-${synopsis?.substring(0, 400) || "No synopsis found."}...
+${synopsis ? synopsis.substring(0, 400) : "No synopsis found."}...
 
 🔗 ${url}`;
 
       const imageURL = images.jpg.large_image_url;
-      const imgData = (await axios.get(imageURL, { responseType: "arraybuffer" })).data;
+
+      const imgData = (
+        await axios.get(imageURL, { responseType: "arraybuffer" })
+      ).data;
+
       const filePath = path.join(__dirname, "aniinfo.jpg");
       fs.writeFileSync(filePath, imgData);
 
-      api.sendMessage(
+      return api.sendMessage(
         {
           body: msg,
           attachment: fs.createReadStream(filePath)
@@ -73,7 +97,10 @@ ${synopsis?.substring(0, 400) || "No synopsis found."}...
 
     } catch (err) {
       console.error(err);
-      api.sendMessage("🚫 Error fetching anime data. Please try again.", event.threadID);
+      return api.sendMessage(
+        "🚫 Error fetching anime data. Please try again.",
+        event.threadID
+      );
     }
   }
 };

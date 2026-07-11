@@ -7,7 +7,7 @@ module.exports = {
   config: {
     name: "goru2",
     version: "2.6.1",
-    author: "Milon Pro",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 0,
     category: "fun",
@@ -18,7 +18,7 @@ module.exports = {
 /* --- [ 🔐 INTERNAL_SECURE_METADATA ] ---
  * 🤖 BOT NAME: FARHAN BOT
  * 👤 OWNER: FARHAN KHAN 
- * 🔗 FACEBOOK: https://www.facebook.com/DARK.XAIKO.420
+ * 🔗 FACEBOOK: https://www.facebook.com/MR.FARHAN.420
  * 📞 WHATSAPP: +880 1934640061
  * 📍 LOCATION: KHULNA - CHUADANGA, BD
  * --------------------------------------- */

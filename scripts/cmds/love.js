@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "love",
     version: "2.0.0",
-    author: "NAZRUL x MOHAMMAD AKASH",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 0,
     shortDescription: "Sad video sender 😢",

@@ -8,7 +8,7 @@ module.exports = {
     name: "murgi2",
     version: "1.1.0",
     role: 2,
-    author: "MAMUN",
+    author: "FARHAN-KHAN",
     description: "Loop bad word messages until stopped",
     category: "fun",
     usages: "@mention | off",

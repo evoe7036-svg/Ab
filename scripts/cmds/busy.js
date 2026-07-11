@@ -1,11 +1,13 @@
 if (!global.client.busyList)
 	global.client.busyList = {};
 
+const AUTHOR = "FARHAN-KHAN";
+
 module.exports = {
 	config: {
 		name: "busy",
 		version: "1.6",
-		author: "NTKhang",
+		author: AUTHOR,
 		countDown: 5,
 		role: 0,
 		description: {
@@ -40,7 +42,17 @@ module.exports = {
 		}
 	},
 
+	// 🔒 AUTHOR LOCK SYSTEM
+	onLoad: function () {
+		if (this.config.author !== AUTHOR) {
+			this.disabled = true;
+			console.log("❌ AUTHOR MODIFIED - BUSY COMMAND DISABLED");
+		}
+	},
+
 	onStart: async function ({ args, message, event, getLang, usersData }) {
+		if (this.disabled) return;
+
 		const { senderID } = event;
 
 		if (args[0] == "off") {
@@ -52,27 +64,42 @@ module.exports = {
 
 		const reason = args.join(" ") || "";
 		await usersData.set(senderID, reason, "data.busy");
+
 		return message.reply(
-			reason ?
-				getLang("turnedOnWithReason", reason) :
-				getLang("turnedOnWithoutReason")
+			reason
+				? getLang("turnedOnWithReason", reason)
+				: getLang("turnedOnWithoutReason")
 		);
 	},
 
 	onChat: async ({ event, message, getLang }) => {
+		if (this.disabled) return;
+
 		const { mentions } = event;
 
 		if (!mentions || Object.keys(mentions).length == 0)
 			return;
+
 		const arrayMentions = Object.keys(mentions);
 
 		for (const userID of arrayMentions) {
-			const reasonBusy = global.db.allUserData.find(item => item.userID == userID)?.data.busy || false;
+			const reasonBusy =
+				global.db.allUserData.find(item => item.userID == userID)
+					?.data.busy || false;
+
 			if (reasonBusy !== false) {
 				return message.reply(
-					reasonBusy ?
-						getLang("alreadyOnWithReason", mentions[userID].replace("@", ""), reasonBusy) :
-						getLang("alreadyOn", mentions[userID].replace("@", "")));
+					reasonBusy
+						? getLang(
+							"alreadyOnWithReason",
+							mentions[userID].replace("@", ""),
+							reasonBusy
+						)
+						: getLang(
+							"alreadyOn",
+							mentions[userID].replace("@", "")
+						)
+				);
 			}
 		}
 	}

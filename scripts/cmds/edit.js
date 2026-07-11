@@ -7,7 +7,7 @@ module.exports = {
     name: "edit",
     aliases: ["nedit", "edit2"],
     version: "1.6",
-    author: "Neoaz ゐ",
+    author: "FARHAN-KHAN",
     countDown: 15,
     role: 0,
     shortDescription: { en: "Edit image with Nano AI" },

@@ -9,7 +9,7 @@ module.exports = {
   config: {
     name: "sms",
     version: "1.1.1",
-    author: "Azadx69x",
+    author: "MR_FARHAN",
     countDown: 15,
     role: 0,
     shortDescription: { en: "API call (BD)" },

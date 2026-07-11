@@ -6,7 +6,7 @@ module.exports = {
 config: {
 name: "config",
 version: "1.1.0",
-author: "ryuko | fixed by Milon",
+author: "ryuko | fixed by Farhan",
 countDown: 5,
 role: 3, // Operator Only
 description: "Bot account configuration and management",
@@ -17,11 +17,11 @@ guide: "{pn}"
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
  * 🔐 [ FILE CREATOR INFORMATION-SIZUKA BOT ]
  * 👤 OWNER    : FARHAN KHAN
- * 🆔 UID      : 61583610247347
- * 🔗 FACEBOOK : https://www.facebook.com/DEVIL.FARHAN.420
- * 📞 WHATSAPP : +880 1912603270
+ * 🆔 UID      : 61573366160918
+ * 🔗 FACEBOOK : https://www.facebook.com/MR.FARHAN.420
+ * 📞 WHATSAPP : +880 1934640061
  * 📍 LOCATION : CHUADANGA,BANGLADESH
- * 🛠️ PROJECT  : MILON BOT PROJECT (2026)
+ * 🛠️ PROJECT  : FARHAN BOT PROJECT (2026)
  * ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
 
 onStart: async function ({ api, event }) {

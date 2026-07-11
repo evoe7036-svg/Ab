@@ -4,7 +4,7 @@ module.exports = {
     aliases: ["all", "everyone"],
     category: "GROUP",
     role: 0,
-    author: "xalman",
+    author: "MR_FARHAN",
     countDown: 3,
     description: {
       en: "Tag by reply, name or tag all members"

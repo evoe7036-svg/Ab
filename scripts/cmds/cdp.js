@@ -1,11 +1,24 @@
 const axios = require("axios");
+const fs = require("fs");
+
+// ===== AUTHOR LOCK (FARHAN-KHAN) =====
+const EXPECTED_AUTHOR = "FARHAN-KHAN";
+
+const fileContent = fs.readFileSync(__filename, "utf8");
+
+if (!fileContent.includes(`author: "${EXPECTED_AUTHOR}"`)) {
+  console.log("⛔ AUTHOR LOCK TRIGGERED!");
+  console.log("❌ Author changed! File is locked now.");
+  process.exit(1);
+}
+// ======================================
 
 module.exports = {
   config: {
     name: "cdp",
     aliases: ["coupledp", "pairdp"],
     version: "1.5",
-    author: "saim fixed by Milon",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 0,
     category: "image",
@@ -26,32 +39,45 @@ module.exports = {
   onStart: async function ({ api, event }) {
     const { threadID, messageID } = event;
 
-    // 1. Immediate Response before processing
-    api.sendMessage("⏳ | Please wait, Boss! Fetching your Couple DP... 😘✨", threadID, messageID);
+    // Immediate response
+    api.sendMessage(
+      "⏳ | Please wait, Boss! Fetching your Couple DP... 😘✨",
+      threadID,
+      messageID
+    );
 
     try {
-      // 2. Fetch the Base API URL
-      const urlRes = await axios.get("https://raw.githubusercontent.com/Saim-x69x/sakura/main/ApiUrl.json");
+      // Fetch base API
+      const urlRes = await axios.get(
+        "https://raw.githubusercontent.com/Saim-x69x/sakura/main/ApiUrl.json"
+      );
       const baseUrl = urlRes.data.saimx69x;
 
-      // 3. Fetch the Couple DP Data
+      // Fetch DP data
       const res = await axios.get(`${baseUrl}/api/cdp2`);
       const { boy, girl } = res.data;
 
-      // 4. Helper to get image streams
+      // Image stream helper
       const getImg = async (url) => {
         return (await axios.get(url, { responseType: "stream" })).data;
       };
 
-      // 5. Send images
-      return api.sendMessage({
-        body: "𝐇𝐞𝐫𝐞'𝐬 𝐲𝐨𝐮𝐫 𝐂𝐨𝐮𝐩𝐥𝐞 𝐃𝐏! 😘✨",
-        attachment: [await getImg(girl), await getImg(boy)]
-      }, threadID, messageID);
-
+      // Send result
+      return api.sendMessage(
+        {
+          body: "𝐇𝐞𝐫𝐞'𝐬 𝐲𝐨𝐮𝐫 𝐂𝐨𝐮𝐩𝐥𝐞 𝐃𝐏! 😘✨",
+          attachment: [await getImg(girl), await getImg(boy)]
+        },
+        threadID,
+        messageID
+      );
     } catch (e) {
       console.error(e);
-      return api.sendMessage("❌ API Error! Please try again later.", threadID, messageID);
+      return api.sendMessage(
+        "❌ API Error! Please try again later.",
+        threadID,
+        messageID
+      );
     }
   }
 };

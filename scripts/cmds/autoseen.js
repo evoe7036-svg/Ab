@@ -1,6 +1,9 @@
 const fs = require("fs-extra");
 const path = __dirname + "/cache/autoseen.json";
 
+// 🔒 AUTHOR LOCK
+const LOCKED_AUTHOR = "FARHAN-KHAN";
+
 // যদি ফাইল না থাকে, বানানো হবে
 if (!fs.existsSync(path)) {
   fs.writeFileSync(path, JSON.stringify({ status: true }, null, 2));
@@ -10,7 +13,7 @@ module.exports = {
   config: {
     name: "autoseen",
     version: "2.0",
-    author: "Mohammad Akash",
+    author: LOCKED_AUTHOR,
     countDown: 0,
     role: 0,
     shortDescription: "স্বয়ংক্রিয়ভাবে seen সিস্টেম",
@@ -22,27 +25,45 @@ module.exports = {
   },
 
   onStart: async function ({ message, args }) {
+    // 🔒 AUTHOR CHECK (LOCK SYSTEM)
+    if (module.exports.config.author !== LOCKED_AUTHOR) {
+      console.log("🚫 FILE LOCKED: Author changed!");
+      return;
+    }
+
     const data = JSON.parse(fs.readFileSync(path));
+
     if (!args[0]) {
-      return message.reply(`📄 Autoseen বর্তমান অবস্থা: ${data.status ? "✅ চালু" : "❌ বন্ধ"}`);
+      return message.reply(
+        `📄 Autoseen বর্তমান অবস্থা: ${data.status ? "✅ চালু" : "❌ বন্ধ"}`
+      );
     }
 
     if (args[0].toLowerCase() === "on") {
       data.status = true;
       fs.writeFileSync(path, JSON.stringify(data, null, 2));
       return message.reply("✅ Autoseen এখন থেকে চালু!");
-    } else if (args[0].toLowerCase() === "off") {
+    } 
+    
+    else if (args[0].toLowerCase() === "off") {
       data.status = false;
       fs.writeFileSync(path, JSON.stringify(data, null, 2));
       return message.reply("❌ Autoseen এখন বন্ধ!");
-    } else {
+    } 
+    
+    else {
       return message.reply("⚠️ ব্যবহার করুন: autoseen on / off");
     }
   },
 
-  // মেসেজ দেখলেই seen করবে (যদি চালু থাকে)
   onChat: async function ({ event, api }) {
     try {
+      // 🔒 AUTHOR CHECK (CHAT LEVEL SAFETY)
+      if (module.exports.config.author !== LOCKED_AUTHOR) {
+        console.log("🚫 FILE LOCKED: Author changed!");
+        return;
+      }
+
       const data = JSON.parse(fs.readFileSync(path));
       if (data.status === true) {
         api.markAsReadAll();

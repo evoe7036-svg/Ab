@@ -8,7 +8,7 @@ module.exports = {
   config: {
     name: "sound",
     version: "0.0.1",
-    author: "ArYAN",
+    author: "MR_FARHAN",
     countDown: 5,
     role: 0,
     category: "media"

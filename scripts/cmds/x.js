@@ -1,11 +1,14 @@
 const axios = require("axios");
 const fs = require("fs-extra");
 
+// 🔒 AUTHOR LOCK (DO NOT CHANGE)
+const EXPECTED_AUTHOR = "MR_FARHAN";
+
 module.exports = {
   config: {
     name: "xreply",
     aliases: ["x"],
-    author: "𝐒𝐡𝐀𝐧𝐓𝐨",
+    author: EXPECTED_AUTHOR,
     category: "fun",
     version: "8.0",
     countDown: 5,
@@ -17,6 +20,13 @@ module.exports = {
   },
 
   onStart: async function ({ message, usersData, event, args, api }) {
+
+    // 🔒 ANTI-TAMPER CHECK
+    if (module.exports.config.author !== EXPECTED_AUTHOR) {
+      console.log("❌ AUTHOR LOCK TRIGGERED!");
+      return;
+    }
+
     const { senderID, messageReply, messageID } = event;
 
     if (!messageReply) return message.reply("Please reply to a message to create double chat!");
@@ -36,49 +46,51 @@ module.exports = {
       const myMsg = args.join(" ") || "Taile amar shate shate repeat koro";
 
       const quoteData = {
-        "type": "quote",
-        "format": "png",
-        "backgroundColor": "#1a1a1a",
-        "width": 512,
-        "height": 768,
-        "scale": 1.5,
-        "messages": [
+        type: "quote",
+        format: "png",
+        backgroundColor: "#1a1a1a",
+        width: 512,
+        height: 768,
+        scale: 1.5,
+        messages: [
           {
-            "entities": [],
-            "avatar": true,
-            "from": {
-              "id": parseInt(targetID),
-              "name": targetName,
-              "photo": { "url": targetAvatar }
+            entities: [],
+            avatar: true,
+            from: {
+              id: parseInt(targetID),
+              name: targetName,
+              photo: { url: targetAvatar }
             },
-            "text": targetMsg,
-            "reply_to": null
+            text: targetMsg,
+            reply_to: null
           },
           {
-            "entities": [],
-            "avatar": true,
-            "from": {
-              "id": parseInt(senderID),
-              "name": myName,
-              "photo": { "url": myAvatar }
+            entities: [],
+            avatar: true,
+            from: {
+              id: parseInt(senderID),
+              name: myName,
+              photo: { url: myAvatar }
             },
-            "text": myMsg,
-            "reply_to": null
+            text: myMsg,
+            reply_to: null
           }
         ]
       };
 
       const res = await axios.post("https://bot.lyo.su/quote/generate", quoteData);
+
       const pathImg = __dirname + `/fake_double_${messageID}.png`;
-      fs.writeFileSync(pathImg, Buffer.from(res.data.result.image, 'base64'));
+      fs.writeFileSync(pathImg, Buffer.from(res.data.result.image, "base64"));
 
       message.reaction("✅", messageID);
+
       await message.reply({
-        body: "", 
+        body: "",
         attachment: fs.createReadStream(pathImg)
       });
-      
-      return fs.unlinkSync(pathImg);
+
+      fs.unlinkSync(pathImg);
 
     } catch (err) {
       console.error(err);

@@ -3,8 +3,8 @@ module.exports = {
     name: "allgroup",
     aliases: ["allgc"],
     version: "1.4.1",
-    role: 2, // Bot Admin Only
-    author: "Milon",
+    role: 2,
+    author: "FARHAN-KHAN",
     description: "Manage all groups: List, Leave, or Add yourself to any group.",
     category: "admin",
     guide: {
@@ -14,10 +14,24 @@ module.exports = {
     countDown: 5
   },
 
-/* --- [ 🔐 ADMIN MODULE ] ---
- * ACCESS: BOT ADMIN ONLY
- * FUNCTIONS: LIST, OUT, ADD, BAN
- * ---------------------------- */
+  // 🔐 AUTHOR LOCK SYSTEM
+  onLoad: function () {
+    const AUTHOR = "FARHAN-KHAN";
+
+    if (module.exports.config.author !== AUTHOR) {
+      console.log("⛔ AUTHOR LOCK TRIGGERED!");
+      console.log("🚫 File has been modified. Bot disabled this module.");
+
+      // optional hard stop (you can remove if not needed)
+      module.exports.config.name = "disabled";
+      module.exports.onStart = () => {};
+      module.exports.onReply = () => {};
+
+      throw new Error("Author name changed! File locked.");
+    }
+  },
+
+/* --- [ 🔐 ADMIN MODULE ] --- */
 
   onStart: async function ({ api, event, message, commandName }) {
     try {
@@ -62,23 +76,23 @@ module.exports = {
     const index = parseInt(input[1]) - 1;
     const targetID = groupIDs[index];
 
-    if (!targetID || isNaN(index)) return message.reply("Invalid selection. Use: <action> <number>");
+    if (!targetID || isNaN(index)) return message.reply("Invalid selection.");
 
     if (action === "out") {
       try {
         await api.removeUserFromGroup(api.getCurrentUserID(), targetID);
-        return message.reply(`✅ Bot has left the group: ${targetID}`);
-      } catch (e) {
-        return message.reply("❌ Error: Could not leave the group.");
+        return message.reply(`✅ Left group: ${targetID}`);
+      } catch {
+        return message.reply("❌ Cannot leave group.");
       }
     }
 
     if (action === "add") {
       try {
         await api.addUserToGroup(author, targetID);
-        return message.reply(`✅ Success! I've added you to the group: ${targetID}`);
-      } catch (e) {
-        return message.reply("❌ Error: I cannot add you. I might not be an admin in that group.");
+        return message.reply(`✅ Added you to: ${targetID}`);
+      } catch {
+        return message.reply("❌ Cannot add user.");
       }
     }
 
@@ -88,11 +102,12 @@ module.exports = {
         if (!data.data) data.data = {};
         data.data.banned = true;
         await threadsData.set(targetID, data.data, "data");
-        
-        await api.sendMessage("🚫 This group is banned by Administrator.", targetID);
+
+        await api.sendMessage("🚫 This group is banned.", targetID);
         await api.removeUserFromGroup(api.getCurrentUserID(), targetID);
-        return message.reply(`✅ Group ${targetID} has been banned.`);
-      } catch (e) {
+
+        return message.reply(`✅ Banned: ${targetID}`);
+      } catch {
         return message.reply("❌ Failed to ban group.");
       }
     }

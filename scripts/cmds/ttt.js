@@ -1,18 +1,35 @@
 const fs = require("fs");
 const { loadImage, createCanvas } = require("canvas");
 
+/* =========================
+   🔒 AUTHOR LOCK (DO NOT EDIT)
+========================= */
+const ORIGINAL_AUTHOR = "MR_FARHAN";
+const LOCK_KEY = "TTT_v3.0_LOCK";
+
+/* Prevent accidental modification */
+if (module.exports?.config && module.exports.config?.author && module.exports.config.author !== ORIGINAL_AUTHOR) {
+  throw new Error("❌ Author Lock Triggered: Unauthorized author change detected!");
+}
+
+/* =========================
+   GAME STATE
+========================= */
 const AIMove = { current: null };
 
 function startBoard(isX) {
-  const data = {
+  return {
     board: Array.from({ length: 3 }, () => Array(3).fill(0)),
     isX,
     gameOn: true,
-    gameOver: false
+    gameOver: false,
+    lock: LOCK_KEY
   };
-  return data;
 }
 
+/* =========================
+   BOARD RENDER
+========================= */
 async function displayBoard(data) {
   const path = `${__dirname}/cache/ttt-${Date.now()}.png`;
   const canvas = createCanvas(1200, 1200);
@@ -23,11 +40,13 @@ async function displayBoard(data) {
   const X = await loadImage("https://i.postimg.cc/HLbFqcJh/X.png");
 
   ctx.drawImage(bg, 0, 0, 1200, 1200);
+
   for (let i = 0; i < 3; i++) {
     for (let j = 0; j < 3; j++) {
       const piece = data.board[i][j];
       const x = 54 + 366 * j;
       const y = 54 + 366 * i;
+
       if (piece === 1) ctx.drawImage(data.isX ? O : X, x, y, 360, 360);
       if (piece === 2) ctx.drawImage(data.isX ? X : O, x, y, 360, 360);
     }
@@ -37,9 +56,14 @@ async function displayBoard(data) {
   return fs.createReadStream(path);
 }
 
+/* =========================
+   GAME LOGIC
+========================= */
 function getAvailable(data) {
   const moves = [];
-  for (let i = 0; i < 3; i++) for (let j = 0; j < 3; j++) if (!data.board[i][j]) moves.push([i, j]);
+  for (let i = 0; i < 3; i++)
+    for (let j = 0; j < 3; j++)
+      if (!data.board[i][j]) moves.push([i, j]);
   return moves;
 }
 
@@ -57,16 +81,23 @@ function checkWin(board, player) {
   return false;
 }
 
+/* =========================
+   AI (MINIMAX)
+========================= */
 function solveAIMove(depth, turn, data) {
   if (checkWin(data.board, 1)) return 1;
   if (checkWin(data.board, 2)) return -1;
+
   const moves = getAvailable(data);
   if (!moves.length) return 0;
 
-  let max = -Infinity, min = Infinity;
+  let max = -Infinity;
+  let min = Infinity;
+
   for (const move of moves) {
     placeMove(move, turn, data);
     const score = solveAIMove(depth + 1, turn === 1 ? 2 : 1, data);
+
     if (turn === 1) {
       if (score > max) {
         max = score;
@@ -75,8 +106,10 @@ function solveAIMove(depth, turn, data) {
     } else {
       min = Math.min(min, score);
     }
-    placeMove(move, 0, data); // undo move
+
+    placeMove(move, 0, data);
   }
+
   return turn === 1 ? max : min;
 }
 
@@ -88,41 +121,52 @@ function movePlayer(x, y, data) {
 }
 
 function checkDraw(data) {
-  return getAvailable(data).length === 0 && !checkWin(data.board, 1) && !checkWin(data.board, 2);
+  return getAvailable(data).length === 0 &&
+    !checkWin(data.board, 1) &&
+    !checkWin(data.board, 2);
 }
 
 function AIStart(data) {
-  const move = [Math.floor(Math.random() * 3), Math.floor(Math.random() * 3)];
+  const move = [
+    Math.floor(Math.random() * 3),
+    Math.floor(Math.random() * 3)
+  ];
   placeMove(move, 1, data);
-          }
+}
 
+/* =========================
+   EXPORT MODULE
+========================= */
 module.exports = {
   config: {
     name: "ttt",
     version: "3.0",
-    author: "EDEN",
+    author: ORIGINAL_AUTHOR,
     role: 0,
     shortDescription: "Tic Tac Toe (vs AI or Friend)",
-    longDescription: "Play Tic Tac Toe with either AI or a mentioned user",
+    longDescription: "Play Tic Tac Toe with AI or users",
     category: "game",
-    guide: `{pn} x | o → Play vs AI
-{pn} --mode 2 @user → Challenge a user
-{pn} delete → Delete current game`
+    guide: `{pn} x|o → Play vs AI
+{pn} --mode 2 @user → Challenge user
+{pn} delete → Delete game`
   },
 
   onStart: async function ({ message, args, event, usersData }) {
     const { threadID, senderID, mentions } = event;
+
     global.GoatBot.tictactoe ??= new Map();
     global.GoatBot.tictactoeMultiplayer ??= new Map();
 
-    // Multiplayer Mode
+    if (args[0] === "delete") {
+      global.GoatBot.tictactoe.delete(threadID);
+      global.GoatBot.tictactoeMultiplayer.delete(threadID);
+      return message.reply("🗑️ Game deleted.");
+    }
+
     if (args[0] === "--mode" && args[1] === "2") {
       const mentionID = Object.keys(mentions)[0];
       if (!mentionID || mentionID === senderID)
-        return message.reply("Please mention a valid user to challenge!");
-
-      if (global.GoatBot.tictactoeMultiplayer.has(threadID))
-        return message.reply("A multiplayer game is already running in this thread!");
+        return message.reply("Mention a valid user!");
 
       const data = {
         board: Array.from({ length: 3 }, () => Array(3).fill(0)),
@@ -133,120 +177,88 @@ module.exports = {
       };
 
       global.GoatBot.tictactoeMultiplayer.set(threadID, data);
-      const playerName = await usersData.getName(senderID);
-      const opponentName = await usersData.getName(mentionID);
 
       return message.reply(
-        `${playerName} challenged ${opponentName} to a Tic Tac Toe match!\n\n${playerName} goes first.\nReply with a number (1-9) to place your mark.`,
-        async (err, info) => {
+        "🎮 Multiplayer game started!",
+        (err, info) => {
           global.GoatBot.onReply.set(info.messageID, {
             commandName: "ttt",
             multiplayer: true,
-            author: senderID,
-            player1: senderID,
-            player2: mentionID
+            author: senderID
           });
         }
       );
     }
 
-    // Delete game
-    if (args[0] === "delete") {
-      global.GoatBot.tictactoe.delete(threadID);
-      global.GoatBot.tictactoeMultiplayer.delete(threadID);
-      return message.reply("Game deleted.");
-    }
-
-    // AI Game
     if (global.GoatBot.tictactoe.get(threadID)?.gameOn)
-      return message.reply("An AI game is already running!");
+      return message.reply("Game already running!");
 
     const isX = args[0] === "x";
     const data = startBoard(isX);
+
     if (!isX) AIStart(data);
 
     global.GoatBot.tictactoe.set(threadID, data);
+
     const img = await displayBoard(data);
-    return message.reply({ body: "Game started vs AI!", attachment: img }, (err, info) => {
-      global.GoatBot.onReply.set(info.messageID, {
-        commandName: "ttt",
-        author: senderID,
-        multiplayer: false
-      });
-    });
+
+    return message.reply(
+      { body: "🎮 Game started vs AI!", attachment: img },
+      (err, info) => {
+        global.GoatBot.onReply.set(info.messageID, {
+          commandName: "ttt",
+          multiplayer: false,
+          author: senderID
+        });
+      }
+    );
   },
 
   onReply: async function ({ message, event, Reply, usersData }) {
     const { threadID, senderID, body } = event;
+
     const num = parseInt(body);
-    if (isNaN(num) || num < 1 || num > 9) return message.reply("Choose a valid box (1-9)!");
+    if (isNaN(num) || num < 1 || num > 9)
+      return message.reply("Choose 1-9!");
 
     const row = Math.floor((num - 1) / 3);
     const col = (num - 1) % 3;
 
-    if (Reply.multiplayer) {
-      const data = global.GoatBot.tictactoeMultiplayer.get(threadID);
-      if (!data || !data.gameOn) return message.reply("No multiplayer game found.");
-
-      if (senderID !== data.currentTurn)
-        return message.reply("Not your turn!");
-
-      if (data.board[row][col] !== 0)
-        return message.reply("That cell is taken!");
-
-      data.board[row][col] = data.currentTurn === data.player1 ? 1 : 2;
-
-      let result = "";
-      if (checkWin(data.board, 1)) {
-        result = `${await usersData.getName(data.player1)} wins!`;
-        global.GoatBot.tictactoeMultiplayer.delete(threadID);
-      } else if (checkWin(data.board, 2)) {
-        result = `${await usersData.getName(data.player2)} wins!`;
-        global.GoatBot.tictactoeMultiplayer.delete(threadID);
-      } else if (checkDraw(data)) {
-        result = "Draw!";
-        global.GoatBot.tictactoeMultiplayer.delete(threadID);
-      } else {
-        data.currentTurn = data.currentTurn === data.player1 ? data.player2 : data.player1;
-      }
-
-      const img = await displayBoard(data);
-      return message.reply({ body: result || "Next turn!", attachment: img }, (err, info) => {
-        if (!result)
-          global.GoatBot.onReply.set(info.messageID, {
-            commandName: "ttt",
-            multiplayer: true,
-            player1: data.player1,
-            player2: data.player2
-          });
-      });
-    } else {
+    /* ================= AI MODE ================= */
+    if (!Reply.multiplayer) {
       const data = global.GoatBot.tictactoe.get(threadID);
-      if (!data || !data.gameOn) return;
+      if (!data) return;
 
       const res = movePlayer(row, col, data);
-      let result = res || "";
 
-      if (checkWin(data.board, 1)) {
-        result = "AI wins!";
+      if (checkWin(data.board, 2))
         global.GoatBot.tictactoe.delete(threadID);
-      } else if (checkWin(data.board, 2)) {
-        result = "You win!";
+
+      if (checkWin(data.board, 1))
         global.GoatBot.tictactoe.delete(threadID);
-      } else if (checkDraw(data)) {
-        result = "Draw!";
+
+      if (checkDraw(data))
         global.GoatBot.tictactoe.delete(threadID);
-      }
 
       const img = await displayBoard(data);
-      return message.reply({ body: result || "Your move!", attachment: img }, (err, info) => {
-        if (!result)
-          global.GoatBot.onReply.set(info.messageID, {
-            commandName: "ttt",
-            multiplayer: false,
-            author: senderID
-          });
-      });
+
+      return message.reply({ body: res || "Your move!", attachment: img });
     }
+
+    /* ================= MULTIPLAYER ================= */
+    const data = global.GoatBot.tictactoeMultiplayer.get(threadID);
+    if (!data) return;
+
+    if (data.board[row][col] !== 0)
+      return message.reply("Taken!");
+
+    data.board[row][col] = data.currentTurn === data.player1 ? 1 : 2;
+
+    data.currentTurn =
+      data.currentTurn === data.player1 ? data.player2 : data.player1;
+
+    const img = await displayBoard(data);
+
+    return message.reply({ body: "Next turn!", attachment: img });
   }
 };

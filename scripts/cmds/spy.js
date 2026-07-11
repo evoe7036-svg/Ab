@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "spy",
     version: "1.5",
-    author: "xalman",
+    author: "MR_FARHAN",
     role: 0,
     countDown: 5,
     shortDescription: "Deep dive into user stats",

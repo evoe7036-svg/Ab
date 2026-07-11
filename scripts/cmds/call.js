@@ -8,7 +8,7 @@ module.exports = {
 		name: "call",
 		aliases: ["callad", "called"],
 		version: "1.6",
-		author: "NTKhang",
+		author: "Farhan",
 		countDown: 5,
 		role: 0,
 		shortDescription: {

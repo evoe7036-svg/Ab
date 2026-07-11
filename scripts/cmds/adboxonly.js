@@ -3,7 +3,7 @@ module.exports = {
 		name: "onlyadminbox",
 		aliases: ["onlyadbox", "adboxonly", "adminboxonly"],
 		version: "1.3",
-		author: "NTKhang",
+		author: "FARHAN-KHAN",
 		countDown: 5,
 		role: 2,
 		description: {
@@ -37,6 +37,12 @@ module.exports = {
 	},
 
 	onStart: async function ({ args, message, event, threadsData, getLang }) {
+
+		// 🔒 AUTHOR LOCK CHECK
+		if (module.exports.config.author !== "FARHAN-KHAN") {
+			return message.reply("⛔ AUTHOR CHANGED!\n🔒 THIS COMMAND IS LOCKED.");
+		}
+
 		let isSetNoti = false;
 		let value;
 		let keySetData = "data.onlyAdminBox";

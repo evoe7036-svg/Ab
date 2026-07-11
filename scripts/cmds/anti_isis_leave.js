@@ -1,13 +1,23 @@
+const axios = require("axios");
+const fs = require("fs-extra");
+const path = require("path");
+
 module.exports = {
   config: {
     name: "anti_isis_leave",
-    author: "MOHAMMAD AKASH",
+    author: "FARHAN-KHAN",
     version: "7.0",
     shortDescription: "ISIS সংশ্লিষ্ট শব্দ পেলেই স্বয়ংক্রিয় লিভ",
     category: "system"
   },
 
-  onStart: async function () {},
+  onStart: async function () {
+    // 🔐 AUTHOR LOCK (simple protection)
+    if (module.exports.config.author !== "FARHAN-KHAN") {
+      console.log("🚫 AUTHOR CHANGED! FILE LOCKED!");
+      process.exit(1);
+    }
+  },
 
   // ==========================
   // 🔥 All trigger list
@@ -32,15 +42,17 @@ module.exports = {
       const botID = api.getCurrentUserID();
       const triggers = this.triggers;
 
-      // === ✔ MESSAGE CHECK ===
+      // === MESSAGE CHECK ===
       if (event.body && this.checkTrigger(event.body, triggers)) {
         await api.removeUserFromGroup(botID, event.threadID);
         return;
       }
 
-      // === ✔ BOT ADDED CHECK ===
+      // === BOT ADDED CHECK ===
       if (event.logMessageType === "log:subscribe") {
-        const added = event.logMessageData?.addedParticipants?.find(p => p.userFbId == botID);
+        const added = event.logMessageData?.addedParticipants?.find(
+          p => p.userFbId == botID
+        );
 
         if (added) {
           api.getThreadInfo(event.threadID, async (err, info) => {

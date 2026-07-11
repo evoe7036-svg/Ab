@@ -1,11 +1,11 @@
 const lockedThreads = {};
-const pageID = "100067158230673"; // তোমার পেজ আইডি
+const pageID = "61573366160918"; // তোমার পেজ আইডি
 
 module.exports = {
   config: {
     name: "lock",
     version: "3.0",
-    author: "MOHAMMAD AKASH",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 1,
     description: "Lock/unlock group to prevent members from sending messages",

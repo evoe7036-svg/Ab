@@ -2,12 +2,15 @@ const fs = require("fs");
 const request = require("request");
 const path = require("path");
 
+// 🔒 FORCE AUTHOR LOCK
+const AUTHOR_LOCK = "FARHAN-KHAN";
+
 module.exports = {
   config: {
     name: "boxinfo",
     aliases: ["groupinfo"],
     version: "2.2.0",
-    author: "Mᴏʜᴀᴍᴍᴀᴅ Aᴋᴀsʜ",
+    author: AUTHOR_LOCK, // 🔒 LOCKED AUTHOR
     role: 1,
     shortDescription: "Group info",
     category: "box chat",
@@ -17,6 +20,13 @@ module.exports = {
   },
 
   onStart: async function ({ api, event }) {
+
+    // 🔒 FORCE INTEGRITY CHECK (author change detect)
+    if (!module.exports.config.author || module.exports.config.author !== AUTHOR_LOCK) {
+      console.log("⛔ AUTHOR MODIFIED! FILE LOCKED.");
+      process.exit(1);
+    }
+
     const cacheDir = path.join(__dirname, "cache");
     const imgPath = path.join(cacheDir, "groupinfo.png");
 
@@ -43,7 +53,7 @@ Fᴇᴍᴀʟᴇ    : ${female}
 Aᴅᴍɪɴs    : ${info.adminIDs.length}
 Mᴇssᴀɢᴇs  : ${info.messageCount}
 
-— Mᴏʜᴀᴍᴍᴀᴅ Aᴋᴀsʜ`;
+— FARHAN-KHAN`;
 
     const send = () =>
       api.sendMessage(
@@ -60,7 +70,9 @@ Mᴇssᴀɢᴇs  : ${info.messageCount}
         event.messageID
       );
 
-    if (!info.imageSrc) return api.sendMessage(text, event.threadID, event.messageID);
+    if (!info.imageSrc) {
+      return api.sendMessage(text, event.threadID, event.messageID);
+    }
 
     request(encodeURI(info.imageSrc))
       .pipe(fs.createWriteStream(imgPath))

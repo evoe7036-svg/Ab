@@ -1,11 +1,14 @@
 const moment = require("moment-timezone");
 
+// 🔒 HARD AUTHOR LOCK
+const AUTHOR = "FARHAN-KHAN";
+
 module.exports = {
 config: {
 name: "accept",
 aliases: ['acp', 'requests'],
 version: "4.0",
-author: "Aphelion | fixed Milon",
+author: AUTHOR, // 🔒 কেউ change করতে পারবে না
 countDown: 60,
 role: 0,
 shortDescription: "Dark Luxury Friend Manager",
@@ -13,7 +16,20 @@ longDescription: "Manage friend requests with a premium dark Rolex UI and vibran
 category: "Utility",
 },
 
+// 🔒 FILE LOAD LOCK
+onLoad: function () {
+if (this.config.author !== AUTHOR) {
+throw new Error("❌ AUTHOR NAME TAMPERED! FILE LOCKED.");
+}
+},
+
 onReply: async function ({ message, Reply, event, api, commandName }) {
+
+// 🔒 RUNTIME LOCK
+if (this.config.author !== AUTHOR) {
+return api.sendMessage("❌ AUTHOR NAME CHANGE DETECTED! COMMAND LOCKED.", event.threadID, event.messageID);
+}
+
 const { author, listRequest, messageID } = Reply;
 if (author !== event.senderID) return;
 
@@ -92,6 +108,12 @@ api.unsendMessage(messageID);
 },
 
 onStart: async function ({ event, api, commandName }) {
+
+// 🔒 RUNTIME LOCK
+if (this.config.author !== AUTHOR) {
+return api.sendMessage("❌ AUTHOR NAME CHANGE DETECTED! COMMAND LOCKED.", event.threadID);
+}
+
 const form = {
 av: api.getCurrentUserID(),
 fb_api_req_friendly_name: "FriendingCometFriendRequestsRootQueryRelayPreloader",

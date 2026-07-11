@@ -2,7 +2,7 @@ module.exports = {
   config: {
     name: "join",
     version: "1.1.0",
-    author: "Milon Pro",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 2, 
     description: "Get all group list and join by serial number",
@@ -13,9 +13,9 @@ module.exports = {
   },
 
 /* --- [ 🔐 FILE_CREATOR_INFORMATION ] ---
- * 🤖 BOT NAME: MILON BOT
- * 👤 OWNER: MILON HASAN
- * 📍 LOCATION: NARAYANGANJ, BANGLADESH
+ * 🤖 BOT NAME: FARHAN BOT
+ * 👤 OWNER: FARHAN KHAN 
+ * 📍 LOCATION: CHUAGANGA, BANGLADESH
  * --------------------------------------- */
 
   onStart: async function ({ api, event }) {

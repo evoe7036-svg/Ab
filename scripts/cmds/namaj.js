@@ -8,7 +8,7 @@ module.exports = {
   config: {
     name: "namaj",
     version: "14.0.0",
-    author: "milon",
+    author: "FARHAN-KHAN",
     countDown: 5,
     role: 0,
     shortDescription: "নামাজের সময়সূচী, জেলা এবং বর্তমান তারিখ",

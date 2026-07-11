@@ -1,11 +1,13 @@
 const delay = (ms) => new Promise(res => setTimeout(res, ms));
 
+const LOCKED_AUTHOR = "FARHAN-KHAN";
+
 module.exports = {
   config: {
     name: "buzz",
     version: "3.2.0",
     role: 2,
-    author: "Akash Edit",
+    author: LOCKED_AUTHOR,
     description: "১০০+ ফারহান বস স্টাইল ক্যাপশন পাঠায়",
     category: "fun",
     usages: "@mention",
@@ -14,6 +16,12 @@ module.exports = {
 
   onStart: async function({ message, event, args, api }) {
     try {
+
+      // 🔒 AUTHOR LOCK CHECK
+      if (module.exports.config.author !== LOCKED_AUTHOR) {
+        return message.reply("⛔ Author change detect হয়েছে! এই কমান্ড এখন লক করা।");
+      }
+
       const mention = Object.keys(event.mentions)[0];
       if (!mention) {
         return message.reply("😅 যার জন্য মেসেজ যাবে তাকে আগে @ম্যানশন করো ভাই!");
@@ -77,13 +85,13 @@ module.exports = {
 
       message.reply(`😎 শুরু হচ্ছে "ফারহান বস এর স্টাইল স্টকিং" ${name}-এর জন্য...`);
 
-      // প্রতিটি মেসেজ 3 সেকেন্ড পর পর পাঠানো হবে
       for (const msg of messages) {
         await delay(3000);
         message.reply({ body: msg, mentions: arraytag });
       }
 
       message.reply(`💘 শেষ! ফারহান বস ${name}-এর প্রতি ভালোবাসার ডেলিভারি সম্পন্ন 😅`);
+
     } catch (err) {
       console.error(err);
       message.reply("❌ কিছু একটা সমস্যা হয়েছে ভাই, আবার চেষ্টা করো।");

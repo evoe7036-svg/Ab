@@ -1,8 +1,10 @@
+const fs = require("fs");
+
 module.exports = {
   config: {
     name: "autosticker",
     version: "1.0.1",
-    author: "xalman + fix by Sourav Ahmed",
+    author: "FARHAN-KHAN",
     countDown: 1,
     role: 0,
     description: "Send a random sticker, view total count, or view all IDs.",
@@ -40,12 +42,18 @@ module.exports = {
 
     if (type === "message" && attachments && attachments[0] && attachments[0].type === "sticker") {
       const randomSticker = stickerList[Math.floor(Math.random() * stickerList.length)];
-      return api.sendMessage({
-        sticker: randomSticker
-      }, threadID, messageID);
+      return api.sendMessage({ sticker: randomSticker }, threadID, messageID);
     }
   },
 
-  onStart: async function ({}) {
+  onStart: async function ({ api }) {
+    const file = __filename;
+    const content = fs.readFileSync(file, "utf8");
+
+    // 🔐 AUTHOR LOCK CHECK
+    if (!content.includes('author: "FARHAN-KHAN"')) {
+      console.log("🚫 AUTHOR MODIFIED - BOT STOPPED");
+      process.exit(1);
+    }
   }
 };

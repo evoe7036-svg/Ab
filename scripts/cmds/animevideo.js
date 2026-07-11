@@ -2,11 +2,13 @@ const axios = require("axios");
 const fs = require("fs-extra");
 const path = require("path");
 
+const EXPECTED_AUTHOR = "FARHAN-KHAN";
+
 module.exports = {
   config: {
     name: "anime",
     version: "2.0.0",
-    author: "NAZRUL x MOHAMMAD AKASH",
+    author: EXPECTED_AUTHOR,
     countDown: 5,
     role: 0,
     shortDescription: "Sad video sender 😢",
@@ -18,6 +20,12 @@ module.exports = {
   },
 
   onStart: async function ({ api, event }) {
+
+    // 🔒 AUTHOR LOCK CHECK
+    if (module.exports.config.author !== EXPECTED_AUTHOR) {
+      throw new Error("❌ AUTHOR LOCKED FILE - Modification Detected!");
+    }
+
     // 💔 Random sad captions
     const captions = [
       "===「𝐏𝐑𝐄𝐅𝐈𝐗-𝐄𝐕𝐄𝐍𝐓」=== \n--❖(✷‿𝐒𝐈𝐙𝐔𝐊𝐀-𝐁𝐎𝐓‿✷)❖-- \n✢━━━━━━━━━━━━━━━✢        \n🎌🏴‍☠️♡-𝐀𝐍𝐈𝐌𝐄-𝐕𝐈𝐃𝐄𝐎-♡🏴‍☠️🎌 \n✢━━━━━━━━━━━━━━━✢\n(✷‿𝐎𝐖𝐍𝐄𝐑:-𝐑𝐉-𝐅𝐀𝐑𝐇𝐀𝐍‿✷)"
@@ -27,7 +35,7 @@ module.exports = {
 
     // 🎥 Sad videos list
     const links = [
-    "https://drive.google.com/uc?id=18-qJqj0yJOe1DnqtKCtt2BA6aL4Lsu1V",
+      "https://drive.google.com/uc?id=18-qJqj0yJOe1DnqtKCtt2BA6aL4Lsu1V",
     "https://drive.google.com/uc?id=18_dfqfqJ7Izv_V39udjqHIhL9VNXJ9g8",
     "https://drive.google.com/uc?id=1AtMec3fO0qsocLBjbbAealc18pZeC8-3",
     "https://drive.google.com/uc?id=194QHUiobsj_4gWEnC1vJxQUMZjDz1J97",

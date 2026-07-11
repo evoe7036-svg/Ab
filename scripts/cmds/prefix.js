@@ -15,7 +15,7 @@ module.exports = {
 	config: {
 		name: "prefix",
 		version: "2.2",
-		author: "xalman",
+		author: "FARHAN-KHAN",
 		countDown: 5,
 		role: 0,
 		description: "Change & show bot prefix ",

@@ -1,11 +1,13 @@
 const moment = require("moment-timezone");
 
+const AUTHOR = "FARHAN-KHAN"; // 🔒 locked author
+
 module.exports = {
   config: {
     name: "age",
     aliases: ["myage"],
     version: "6.0",
-    author: "𝐌𝐨𝐡𝐚ᴍᴍᴀᴅ 𝐀ᴋᴀsʜ",
+    author: AUTHOR,
     role: 0,
     category: "AI",
     guide: "age <YYYY | DD/MM/YYYY | D Month YYYY | D/Month/YYYY>",
@@ -14,6 +16,15 @@ module.exports = {
 
   onStart: async function ({ api, event, args }) {
     try {
+
+      // 🔒 AUTHOR LOCK SYSTEM
+      if (module.exports.config.author !== AUTHOR) {
+        return api.sendMessage(
+          "⛔ This file is locked!\nAuthor change detected.",
+          event.threadID
+        );
+      }
+
       if (!args.length) {
         return api.sendMessage(
           "⚠️ Uꜱᴇ:\n• age 2007\n• age 01/05/2007\n• age 3 May 2007\n• age 3/may/2007",
@@ -32,12 +43,10 @@ module.exports = {
         nov:11,november:11,dec:12,december:12
       };
 
-      // YYYY
       if (/^\d{4}$/.test(input)) {
         day = 1; month = 1; year = Number(input);
       }
 
-      // DD/MM/YYYY
       else if (/^\d{1,2}\/\d{1,2}\/\d{2,4}$/.test(input)) {
         const p = input.split("/");
         day = +p[0];
@@ -46,7 +55,6 @@ module.exports = {
         if (year < 100) year += 2000;
       }
 
-      // 3 May 2007
       else if (/^\d{1,2}\s+[a-zA-Z]{3,9}\s+\d{4}$/.test(input)) {
         const p = input.split(" ");
         day = +p[0];
@@ -54,7 +62,6 @@ module.exports = {
         year = +p[2];
       }
 
-      // 3/May/2007
       else if (/^\d{1,2}\/[a-zA-Z]{3,9}\/\d{4}$/.test(input)) {
         const p = input.split("/");
         day = +p[0];

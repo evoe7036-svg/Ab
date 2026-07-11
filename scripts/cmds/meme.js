@@ -10,7 +10,7 @@ config: {
 name: "meme",
 aliases: ["memes"],
 version: "1.7",
-author: "MahMUD-by milon",
+author: "MahMUD-by Farhan",
 countDown: 10,
 role: 0,
 category: "fun",

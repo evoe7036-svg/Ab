@@ -6,7 +6,7 @@ module.exports = {
   config: {
     name: "rndm",
     version: "2.5",
-    author: "Milon Pro",
+    author: "MR_FARHAN",
     countDown: 5,
     role: 0,
     description: "Send random Anime TikTok video",

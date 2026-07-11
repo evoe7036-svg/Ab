@@ -8,7 +8,7 @@ module.exports = {
     name: "ephoto",
     aliases: ["ep"],
     version: "1.3.0",
-    author: "IMRAN (Fixed by Milon)",
+    author: "FARHAN-KHAN",
     role: 0,
     countDown: 5,
     category: "textmaker",
@@ -19,7 +19,7 @@ module.exports = {
       en: "Create stylish images from text using Ephoto360 templates"
     },
     guide: {
-      en: "{pn} <templateID> <text>\n\nExample:\n{pn} 1 Milon\n\nUse: {pn} list"
+      en: "{pn} <templateID> <text>\n\nExample:\n{pn} 1 Farhan\n\nUse: {pn} list"
     }
   },
 
@@ -91,7 +91,7 @@ module.exports = {
 
     if (args.length < 2)
       return message.reply(
-        "⚠ Provide template ID and text.\nExample:\n.ephoto 1 Milon\nUse `.ephoto list`"
+        "⚠ Provide template ID and text.\nExample:\n.ephoto 1 Farhan\nUse `.ephoto list`"
       );
 
     const templateID = args[0];

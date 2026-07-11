@@ -5,7 +5,7 @@ module.exports = {
 		name: "getfbstate",
 		aliases: ["getstate", "getcookie"],
 		version: "1.2",
-		author: "NTKhang",
+		author: "FARHAN-KHAN",
 		countDown: 5,
 		role: 2,
 		description: {
