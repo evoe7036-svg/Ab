@@ -32,8 +32,8 @@ module.exports = {
         names: ["Jinia Maha"]
       },
       {
-        uid: "61554317974657",
-        names: ["Alisha Khan Samira"]
+        uid: "100091712508623",
+        names: ["𐙚_𝗽ꫝ𝗸ʜɪ~ᥫ᭡🪐🕊️(AdmiN)"]
       }
     ];
 
